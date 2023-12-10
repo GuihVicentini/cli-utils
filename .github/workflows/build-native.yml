@@ -21,8 +21,8 @@ jobs:
         with:
           arguments: nativeCompile
       
-      # - name: Upload binary
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: helloworld-${{ matrix.os }}
-      #     path: helloworld*
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: cli-utils-${{ matrix.os }}
+          path: cli-utils/**/build/native/nativeCompile/*
