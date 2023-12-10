@@ -25,4 +25,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: cli-utils-${{ matrix.os }}
-          path: cli-utils/**/build/native/nativeCompile/*
+          path: ${{ github.workspace }}/**/build/native/nativeCompile/*
+          if-no-files-found: error
