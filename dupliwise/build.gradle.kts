@@ -1,9 +1,3 @@
-import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
-import org.gradle.kotlin.dsl.internal.sharedruntime.codegen.sourceNameOfBinaryName
-import org.gradle.nativeplatform.internal.configure.NativeBinaries
-import org.gradle.nativeplatform.toolchain.internal.NativeCompileSpec
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
 	java
 	id("org.springframework.boot") version "3.1.6"

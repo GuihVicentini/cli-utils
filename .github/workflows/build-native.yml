@@ -16,12 +16,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
 
-      - name: Build and run HelloWorld.java
-        run: |
-          echo 'public class HelloWorld { public static void main(String[] args) { System.out.println("Hello, World!"); } }' > HelloWorld.java
-          javac HelloWorld.java
-          native-image HelloWorld
-          ./helloworld
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
       
       # - name: Upload binary
       #   uses: actions/upload-artifact@v2
