@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: cli-utils on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: nativeCompile
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: cli-utils-${{ matrix.os }}
+          path: ${{ github.workspace }}/**/build/native/nativeCompile/*
+          if-no-files-found: error
+
+  tag:
+    name: create tag
+    needs: [build]
+    if: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          WITH_V: true
+          DEFAULT_BUMP: patch
+
+  publish:
+    needs: [tag]
+    name: publish release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: cli-utils
+          path: cli-utils/bin
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: cli-utils/bin
+
+      - name: Publish release
+        uses: ghalactic/github-release-from-tag@v5
+        with:
+          generateReleaseNotes: "true"
+          assets: |
+            - path: cli-utils/bin/*
+              optional: true
