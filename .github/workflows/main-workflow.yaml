@@ -60,7 +60,6 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: cli-utils
           path: cli-utils/bin
 
       - name: Display structure of downloaded files
