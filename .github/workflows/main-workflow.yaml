@@ -51,12 +51,12 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -al
-        working-directory: cli-utils/bin
+        working-directory: cli-utils/bin/cli-utils-ubuntu-latest
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: cli-utils/bin/*
+          artifacts: "cli-utils/bin/cli-utils-*/*"
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
