@@ -30,7 +30,7 @@ jobs:
           if-no-files-found: error
 
   tag:
-    name: create tag
+    name: Create tag and Release
     needs: [build]
     if: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
@@ -38,38 +38,52 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: '0'
 
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-          WITH_V: true
-          DEFAULT_BUMP: patch
-
-  publish:
-    needs: [tag]
-    name: publish release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/download-artifact@v3
         with:
           path: cli-utils/bin
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -al
         working-directory: cli-utils/bin
 
-      - name: Publish release
-        uses: ghalactic/github-release-from-tag@v5
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
         with:
-          generateReleaseNotes: "true"
-          assets: |
-            - path: cli-utils/bin/*
-              optional: true
+          artifacts: cli-utils/bin/*
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+
+#      - name: Bump version and push tag
+#        uses: anothrNick/github-tag-action@1.64.0 # Don't use @master or @v1 unless you're happy to test the latest version
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+#          WITH_V: true
+#          DEFAULT_BUMP: patch
+
+#  publish:
+#    needs: [tag]
+#    name: publish release
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#
+
+#      - name: Publish release
+#        uses: ghalactic/github-release-from-tag@v5
+#        with:
+#          generateReleaseNotes: "true"
+#          assets: |
+#            - path: cli-utils/bin/*
+#              optional: true
