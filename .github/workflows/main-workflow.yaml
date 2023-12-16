@@ -54,7 +54,11 @@ jobs:
         working-directory: bin/
 
       - name: Compress files
-        run: chmod +rwx tar-folders.sh && ./tar-folders.sh bin
+        run: | 
+          for folder in bin/*/; do 
+            folder_name=$(basename "$folder") 
+            tar -czf "${folder_name}.tar.gz" "$folder_name" && echo "Created ${folder_name}.tar.gz" 
+          done
 
 #      - name: Publish Release
 #        uses: ncipollo/release-action@v1
