@@ -9,6 +9,6 @@ fi
 # Iterate through each folder in the specified directory
 for folder in "$1"/*/; do
     folder_name=$(basename "$folder")
-    tar -czf "${folder_name}.tar.gz" "$folder_name"
+    tar czf "${folder_name}.tar.gz" "$folder_name"
     echo "Created ${folder_name}.tar.gz"
 done
