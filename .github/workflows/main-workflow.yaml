@@ -58,14 +58,14 @@ jobs:
           ls -al
           for folder in */; do 
             folder_name=$(basename "$folder") 
-            tar -czvf "${folder_name}.tar.gz" "$folder_name" && echo "Created ${folder_name}.tar.gz" 
+            tar -czf "${folder_name}.tar.gz" "$folder_name" --exclude=*args && echo "Created ${folder_name}.tar.gz" 
           done
         working-directory: bin/
 
-#      - name: Publish Release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          artifacts: "bin/cli-utils-*"
-#          tag: ${{ steps.tag_version.outputs.new_tag }}
-#          name: Release ${{ steps.tag_version.outputs.new_tag }}
-#          body: ${{ steps.tag_version.outputs.changelog }}
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "bin/*.tar.gz"
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}

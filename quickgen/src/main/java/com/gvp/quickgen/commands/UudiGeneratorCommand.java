@@ -10,6 +10,12 @@ public class UudiGeneratorCommand implements Runnable {
     @CommandLine.Parameters(arity = "0..1", description = "The amount of uuids to be generated")
     private int amount;
 
+    @CommandLine.Option(names = {"-U", "--upper"}, description = "Print all letters of the uuid in uppercase")
+    private boolean upperCase;
+
+    @CommandLine.Option(names = {"-d", "--details"}, description = "Print all letters of the uuid in uppercase")
+    private boolean details;
+
     @Override
     public void run() {
         int amount = validateAmount(this.amount);
@@ -20,7 +26,13 @@ public class UudiGeneratorCommand implements Runnable {
     }
 
     private void printUuidInformation(UUID uuid) {
-        System.out.println(uuid.toString());
+        String uuidValue = upperCase ? uuid.toString().toUpperCase() : uuid.toString();
+        String output = details ? addDetails(uuidValue, uuid) : uuidValue;
+        System.out.println(output);
+    }
+
+    private String addDetails(String uuidValue, UUID uuid) {
+        return String.format("Value: %s, Version: %s, Variant: %s%n", uuidValue, uuid.version(), uuid.variant());
     }
 
     private UUID generateUuid() {
