@@ -55,10 +55,12 @@ jobs:
 
       - name: Compress files
         run: | 
-          for folder in bin/*/; do 
+          ls -al
+          for folder in */; do 
             folder_name=$(basename "$folder") 
-            tar -czf "${folder_name}.tar.gz" "$folder_name" && echo "Created ${folder_name}.tar.gz" 
+            tar -czvf "${folder_name}.tar.gz" "$folder_name" && echo "Created ${folder_name}.tar.gz" 
           done
+        working-directory: bin/
 
 #      - name: Publish Release
 #        uses: ncipollo/release-action@v1
