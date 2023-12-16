@@ -1,2 +1,2 @@
 rootProject.name = "cli-utils"
-include("dupliwise")
+include("dupliwise", "quickgen")
