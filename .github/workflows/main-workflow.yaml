@@ -58,7 +58,7 @@ jobs:
           ls -al
           for folder in */; do 
             folder_name=$(basename "$folder") 
-            tar -czf "${folder_name}.tar.gz" "$folder_name" --exclude=*args && echo "Created ${folder_name}.tar.gz" 
+            tar -czf "${folder_name}.tar.gz" --exclude=*.args "$folder_name" && echo "Created ${folder_name}.tar.gz" 
           done
         working-directory: bin/
 
