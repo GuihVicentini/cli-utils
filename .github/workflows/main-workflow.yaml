@@ -54,7 +54,7 @@ jobs:
         working-directory: bin/
 
       - name: Compress files
-        run: ./tar-folders.sh bin
+        run: chmod +rwx tar-folders.sh && ./tar-folders.sh bin
 
 #      - name: Publish Release
 #        uses: ncipollo/release-action@v1
