@@ -1,13 +1,12 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.1.6"
-	id("io.spring.dependency-management") version "1.1.4"
-	id("org.graalvm.buildtools.native") version "0.9.28"
-	id("net.researchgate.release") version "3.0.2"
+	id("org.springframework.boot")
+	id("io.spring.dependency-management")
+	id("org.graalvm.buildtools.native")
 }
 
 group = "com.gvb"
-version = "0.0.1"
+version = rootProject.file("version.txt").readLines().toString().replace(Regex("[\\[\\]]"), "")
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -24,10 +23,10 @@ repositories {
 }
 
 dependencies {
-	implementation("info.picocli:picocli-spring-boot-starter:4.7.5")
+	implementation(libs.picocli.spring)
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	annotationProcessor("info.picocli:picocli-codegen:4.7.5")
+	annotationProcessor(libs.picocli.codegen)
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
