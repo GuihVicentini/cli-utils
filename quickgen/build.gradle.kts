@@ -6,7 +6,7 @@ plugins {
 	id("net.researchgate.release") version "3.0.2"
 }
 
-group = "com.gvp"
+group = "com.gvb"
 version = "0.0.1"
 
 java {
