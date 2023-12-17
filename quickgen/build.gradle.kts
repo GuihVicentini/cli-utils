@@ -3,6 +3,7 @@ plugins {
 	id("org.springframework.boot") version "3.1.6"
 	id("io.spring.dependency-management") version "1.1.4"
 	id("org.graalvm.buildtools.native") version "0.9.28"
+	id("net.researchgate.release") version "3.0.2"
 }
 
 group = "com.gvp"
